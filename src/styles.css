@@ -1,0 +1,306 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-leaf: var(--leaf);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+
+  --shadow-elegant: 0 30px 60px -30px color-mix(in oklab, var(--primary) 35%, transparent);
+  --shadow-glow: 0 0 80px color-mix(in oklab, var(--gold) 40%, transparent);
+  --shadow-card: 0 20px 40px -24px oklch(0.2 0.05 150 / 0.25);
+
+  --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--leaf) 100%);
+  --gradient-gold: linear-gradient(135deg, oklch(0.78 0.14 80) 0%, oklch(0.88 0.12 90) 100%);
+  --gradient-hero: radial-gradient(
+    ellipse at top,
+    oklch(0.32 0.09 150) 0%,
+    oklch(0.18 0.05 150) 60%,
+    oklch(0.12 0.03 150) 100%
+  );
+  --gradient-cream: linear-gradient(180deg, oklch(0.985 0.012 95) 0%, oklch(0.96 0.025 90) 100%);
+}
+
+:root {
+  --radius: 0.875rem;
+  --background: oklch(0.985 0.012 95);
+  --foreground: oklch(0.2 0.04 150);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.04 150);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.04 150);
+
+  --primary: oklch(0.34 0.09 150);
+  --primary-foreground: oklch(0.985 0.012 95);
+  --leaf: oklch(0.62 0.18 142);
+  --gold: oklch(0.78 0.14 80);
+  --cream: oklch(0.96 0.025 90);
+
+  --secondary: oklch(0.94 0.02 95);
+  --secondary-foreground: oklch(0.2 0.04 150);
+  --muted: oklch(0.94 0.02 95);
+  --muted-foreground: oklch(0.45 0.03 150);
+  --accent: oklch(0.92 0.06 130);
+  --accent-foreground: oklch(0.2 0.04 150);
+  --destructive: oklch(0.55 0.22 27);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.88 0.02 100);
+  --input: oklch(0.88 0.02 100);
+  --ring: oklch(0.62 0.18 142);
+
+  --chart-1: oklch(0.34 0.09 150);
+  --chart-2: oklch(0.62 0.18 142);
+  --chart-3: oklch(0.78 0.14 80);
+  --chart-4: oklch(0.55 0.18 50);
+  --chart-5: oklch(0.7 0.15 30);
+
+  --sidebar: oklch(0.985 0.012 95);
+  --sidebar-foreground: oklch(0.2 0.04 150);
+  --sidebar-primary: oklch(0.34 0.09 150);
+  --sidebar-primary-foreground: oklch(0.985 0.012 95);
+  --sidebar-accent: oklch(0.94 0.02 95);
+  --sidebar-accent-foreground: oklch(0.2 0.04 150);
+  --sidebar-border: oklch(0.88 0.02 100);
+  --sidebar-ring: oklch(0.62 0.18 142);
+}
+
+.dark {
+  --background: oklch(0.14 0.03 150);
+  --foreground: oklch(0.96 0.02 95);
+  --card: oklch(0.18 0.04 150);
+  --card-foreground: oklch(0.96 0.02 95);
+  --popover: oklch(0.18 0.04 150);
+  --popover-foreground: oklch(0.96 0.02 95);
+  --primary: oklch(0.7 0.16 142);
+  --primary-foreground: oklch(0.14 0.03 150);
+  --secondary: oklch(0.24 0.04 150);
+  --secondary-foreground: oklch(0.96 0.02 95);
+  --muted: oklch(0.24 0.04 150);
+  --muted-foreground: oklch(0.7 0.02 100);
+  --accent: oklch(0.28 0.06 142);
+  --accent-foreground: oklch(0.96 0.02 95);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  section[id],
+  footer[id] {
+    scroll-margin-top: 6rem;
+  }
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+  .bg-gradient-gold {
+    background-image: var(--gradient-gold);
+  }
+  .bg-gradient-hero {
+    background-image: var(--gradient-hero);
+  }
+  .bg-gradient-cream {
+    background-image: var(--gradient-cream);
+  }
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .nav-link {
+    position: relative;
+    color: var(--color-primary);
+    padding-block: 0.4rem;
+    transition:
+      color 0.25s ease,
+      opacity 0.25s ease;
+  }
+  .nav-link::after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-leaf), var(--color-gold));
+    content: "";
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.25s ease;
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible,
+  .nav-link-active {
+    color: var(--color-primary);
+    opacity: 1;
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .nav-link-active::after {
+    transform: scaleX(1);
+  }
+
+  .marquee-track {
+    animation: marquee 40s linear infinite;
+  }
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+  .float-slow {
+    animation: float 7s ease-in-out infinite;
+  }
+  .float-slower {
+    animation: float 10s ease-in-out infinite;
+  }
+  .spin-slow {
+    animation: spin 30s linear infinite;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .leaf-divider {
+    background: radial-gradient(circle at center, var(--leaf) 0 2px, transparent 3px);
+    background-size: 14px 14px;
+  }
+  .product-card {
+    transition:
+      transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.5s;
+  }
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-elegant);
+  }
+  .product-card img {
+    transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .product-card:hover img {
+    transform: scale(1.08) rotate(-2deg);
+  }
+
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 30%, oklch(1 0 0 / 0.35) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.9s;
+  }
+  .btn-shine:hover::after {
+    transform: translateX(100%);
+  }
+  .admin-input {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .admin-input:focus {
+    box-shadow: 0 0 0 2px var(--color-leaf);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(2deg);
+  }
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
