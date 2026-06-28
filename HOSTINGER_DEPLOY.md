@@ -13,6 +13,10 @@ NODE_ENV=production
 VITE_ADMIN_API_BASE=https://api.menmithafoodproducts.com
 ```
 
+If Hostinger fails with a missing Vite package during build, set the install command to
+`npm ci --include=dev`. Some Hostinger builds apply `NODE_ENV=production` during install,
+which can skip build tooling unless it is explicitly included.
+
 ## Admin API app
 
 - Domain or subdomain: `https://api.menmithafoodproducts.com`
