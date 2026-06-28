@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite dev",
     "admin:server": "node src/backend/admin-server.mjs",
+    "admin:start": "node src/backend/admin-server.mjs",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "start": "node .output/server/index.mjs",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

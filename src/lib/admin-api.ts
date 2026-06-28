@@ -33,8 +33,10 @@ type ApiEvent = {
   product?: InventoryProduct;
 };
 
-const API_BASE =
-  (import.meta.env.VITE_ADMIN_API_BASE as string | undefined) ?? "http://localhost:8787";
+const DEFAULT_API_BASE = import.meta.env.DEV
+  ? "http://localhost:8787"
+  : "https://api.menmithafoodproducts.com";
+const API_BASE = (import.meta.env.VITE_ADMIN_API_BASE as string | undefined) ?? DEFAULT_API_BASE;
 const ADMIN_PASSWORD_STORAGE_KEY = "menmitha_admin_password";
 
 export function getStoredAdminPassword() {

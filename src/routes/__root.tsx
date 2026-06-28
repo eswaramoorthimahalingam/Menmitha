@@ -12,6 +12,8 @@ import { type ReactNode } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import appCss from "../styles.css?url";
 
+const SITE_URL = "https://menmithafoodproducts.com";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -86,11 +88,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Cold-pressed oils, home-made masalas and traditional staples — from our home to yours.",
       },
+      { property: "og:url", content: SITE_URL },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: SITE_URL },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

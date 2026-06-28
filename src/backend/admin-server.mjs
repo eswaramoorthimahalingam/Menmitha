@@ -3,9 +3,22 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
-const PORT = Number(process.env.ADMIN_PORT ?? 8787);
-const FRONTEND_URL = process.env.FRONTEND_URL ?? "http://127.0.0.1:5173";
+const DEFAULT_FRONTEND_URL = "https://menmithafoodproducts.com";
+const PORT = Number(process.env.PORT ?? process.env.ADMIN_PORT ?? 8787);
+const FRONTEND_URL = (process.env.FRONTEND_URL ?? DEFAULT_FRONTEND_URL).replace(/\/$/, "");
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? "admin123";
+const ALLOWED_ORIGINS = new Set(
+  [
+    FRONTEND_URL,
+    "https://www.menmithafoodproducts.com",
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    ...(process.env.CORS_ORIGINS ?? "")
+      .split(",")
+      .map((origin) => origin.trim().replace(/\/$/, ""))
+      .filter(Boolean),
+  ].filter(Boolean),
+);
 const DATA_FILE = path.join(process.cwd(), ".data", "admin-store.json");
 const FINAL_STATUSES = new Set(["delivered", "cancelled"]);
 
@@ -149,12 +162,22 @@ async function writeStore(store) {
   await writeFile(DATA_FILE, JSON.stringify(store, null, 2));
 }
 
+function getCorsHeaders(req) {
+  const origin = req?.headers.origin?.replace(/\/$/, "");
+  const allowedOrigin = origin && ALLOWED_ORIGINS.has(origin) ? origin : FRONTEND_URL;
+
+  return {
+    "access-control-allow-origin": allowedOrigin,
+    "access-control-allow-methods": "GET,POST,PUT,PATCH,OPTIONS",
+    "access-control-allow-headers": "content-type,x-admin-password",
+    vary: "Origin",
+  };
+}
+
 function sendJson(res, status, body) {
   res.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
-    "access-control-allow-origin": "*",
-    "access-control-allow-methods": "GET,POST,PUT,PATCH,OPTIONS",
-    "access-control-allow-headers": "content-type,x-admin-password",
+    ...(res.corsHeaders ?? getCorsHeaders()),
   });
   res.end(JSON.stringify(body));
 }
@@ -166,7 +189,7 @@ function sendError(res, status, error) {
 function sendRedirect(res, location) {
   res.writeHead(302, {
     location,
-    "access-control-allow-origin": "*",
+    ...(res.corsHeaders ?? getCorsHeaders()),
   });
   res.end();
 }
@@ -419,7 +442,7 @@ function handleEvents(req, res) {
     "content-type": "text/event-stream",
     "cache-control": "no-cache",
     connection: "keep-alive",
-    "access-control-allow-origin": "*",
+    ...(res.corsHeaders ?? getCorsHeaders(req)),
   });
   clients.add(res);
   readStore().then((store) => {
@@ -430,6 +453,7 @@ function handleEvents(req, res) {
 
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", `http://${req.headers.host}`);
+  res.corsHeaders = getCorsHeaders(req);
 
   if (req.method === "OPTIONS") return sendJson(res, 204, {});
 
