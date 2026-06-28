@@ -9,6 +9,7 @@
     "admin:start": "node src/backend/admin-server.mjs",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "postbuild": "node scripts/prepare-hostinger-build.mjs",
     "preview": "vite preview",
     "start": "node .output/server/index.mjs",
     "lint": "eslint .",

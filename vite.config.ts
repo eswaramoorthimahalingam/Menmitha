@@ -6,7 +6,24 @@ import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tsConfigPaths(), tanstackStart(), viteReact(), tailwindcss(), nitro()],
+  plugins: [
+    tsConfigPaths(),
+    tanstackStart({
+      spa: {
+        enabled: true,
+        maskPath: "/",
+        prerender: {
+          enabled: true,
+          outputPath: "index.html",
+          crawlLinks: true,
+          retryCount: 0,
+        },
+      },
+    }),
+    viteReact(),
+    tailwindcss(),
+    nitro(),
+  ],
   environments: {
     ssr: {
       build: {
