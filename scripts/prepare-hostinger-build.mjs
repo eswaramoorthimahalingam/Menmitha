@@ -11,7 +11,7 @@ if (!existsSync(sourceDir)) {
   throw new Error("Expected .output/public after vite build, but it was not found.");
 }
 
-if (!existsSync(indexHtml) && existsSync(fallbackHtml)) {
+if (existsSync(fallbackHtml)) {
   cpSync(fallbackHtml, indexHtml);
 }
 

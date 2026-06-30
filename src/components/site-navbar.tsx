@@ -1,4 +1,4 @@
-import { Heart, Menu, Search, ShoppingBag, UserRound } from "lucide-react";
+import { ChevronDown, Heart, Menu, Search, ShoppingBag, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
@@ -10,11 +10,11 @@ type SiteNavbarProps = {
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Shop", href: "/#shop" },
-  { label: "Cold-Pressed Oils", href: "/#oils" },
-  { label: "Masalas", href: "/#masalas" },
-  { label: "Our Story", href: "/#story" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Shop", href: "/shop", hasMenu: true },
+  { label: "Categories", href: "/shop#categories", badge: "Fresh", hasMenu: true },
+  { label: "Products", href: "/shop#products", badge: "Hot", hasMenu: true },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export function SiteNavbar({ cartCount = 0, onCart }: SiteNavbarProps) {
@@ -24,7 +24,7 @@ export function SiteNavbar({ cartCount = 0, onCart }: SiteNavbarProps) {
     <>
       <ShoppingBag className="h-5 w-5" />
       {cartCount > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 animate-scale-in items-center justify-center rounded-full bg-leaf px-1 text-[10px] font-bold text-primary-foreground">
+        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 animate-scale-in items-center justify-center rounded-full bg-gold px-1 text-[10px] font-bold text-primary">
           {cartCount}
         </span>
       )}
@@ -84,53 +84,67 @@ export function SiteNavbar({ cartCount = 0, onCart }: SiteNavbarProps) {
 
   return (
     <>
-      <div className="bg-[oklch(0.25_0.09_150)] text-xs text-primary-foreground">
+      <div className="border-b border-gold/50 bg-primary text-xs text-primary-foreground">
         <div className="mx-auto flex max-w-[100rem] items-center justify-between px-6 py-2.5">
-          <span className="opacity-90">Free shipping across India on orders above ₹999</span>
-          <span className="hidden sm:inline opacity-75">Traditional recipes · Made with care</span>
+          <span className="font-semibold">Call us: +91 98765 43210</span>
+          <span className="hidden font-semibold md:inline">
+            Free shipping across India on orders above ₹999{" "}
+            <a href="/shop" className="text-gold underline decoration-gold/70 underline-offset-2">
+              Shop now
+            </a>
+          </span>
+          <span className="hidden sm:inline">English · ₹ INR</span>
         </div>
       </div>
       <header
         className={`sticky top-0 z-40 transition-all duration-500 ${
           scrolled
-            ? "border-b border-primary/15 bg-[oklch(0.965_0.025_90)] text-primary shadow-card"
-            : "border-b border-primary/10 bg-[oklch(0.965_0.025_90)] text-primary"
+            ? "border-b border-primary/15 bg-white/95 text-foreground shadow-card backdrop-blur"
+            : "border-b border-gold/25 bg-cream/95 text-foreground backdrop-blur"
         }`}
       >
-        <div className="mx-auto flex h-24 max-w-[100rem] items-center justify-between gap-6 px-6">
+        <div className="mx-auto flex h-20 max-w-[100rem] items-center justify-between gap-6 px-6">
           <a href="/" className="flex shrink-0 items-center">
             <BrandLogo />
           </a>
 
-          <nav className="hidden items-center gap-9 text-sm font-medium lg:flex">
+          <nav className="hidden items-center gap-8 text-xs font-extrabold uppercase tracking-wide lg:flex">
             {NAV_LINKS.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setActiveHref(link.href)}
-                className={`nav-link ${activeHref === link.href ? "nav-link-active" : ""}`}
+                className={`nav-link inline-flex items-center gap-1.5 ${
+                  activeHref === link.href ? "nav-link-active" : ""
+                }`}
               >
-                {link.label}
+                <span>{link.label}</span>
+                {link.badge && (
+                  <span className="rounded-sm bg-gold px-1.5 py-0.5 text-[9px] leading-none text-primary shadow-sm shadow-gold/20">
+                    {link.badge}
+                  </span>
+                )}
+                {link.hasMenu && <ChevronDown className="h-3 w-3" />}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-1 text-primary">
+          <div className="flex items-center gap-1 text-foreground">
             <button
-              className="rounded-full p-2.5 text-primary transition-colors hover:bg-primary/10"
+              className="rounded-full p-2.5 text-primary transition-colors hover:bg-accent hover:text-primary"
               aria-label="Search"
             >
               <Search className="h-5 w-5" />
             </button>
             <button
-              className="hidden rounded-full p-2.5 text-primary transition-colors hover:bg-primary/10 sm:inline-flex"
+              className="hidden rounded-full p-2.5 text-primary transition-colors hover:bg-accent hover:text-primary sm:inline-flex"
               aria-label="Wishlist"
             >
               <Heart className="h-5 w-5" />
             </button>
             <a
               href="/account"
-              className="rounded-full p-2.5 text-primary transition-colors hover:bg-primary/10"
+              className="rounded-full p-2.5 text-primary transition-colors hover:bg-accent hover:text-primary"
               aria-label="Account"
             >
               <UserRound className="h-5 w-5" />
@@ -138,22 +152,22 @@ export function SiteNavbar({ cartCount = 0, onCart }: SiteNavbarProps) {
             {onCart ? (
               <button
                 onClick={onCart}
-                className="relative rounded-full p-2.5 text-primary transition-colors hover:bg-primary/10"
+                className="relative rounded-full p-2.5 text-primary transition-colors hover:bg-accent hover:text-primary"
                 aria-label="Cart"
               >
                 {cartContent}
               </button>
             ) : (
               <a
-                href="/#shop"
-                className="relative rounded-full p-2.5 text-primary transition-colors hover:bg-primary/10"
+                href="/shop"
+                className="relative rounded-full p-2.5 text-primary transition-colors hover:bg-accent hover:text-primary"
                 aria-label="Shop products"
               >
                 {cartContent}
               </a>
             )}
             <button
-              className="rounded-full p-2.5 text-primary transition-colors hover:bg-primary/10 lg:hidden"
+              className="rounded-full p-2.5 text-primary transition-colors hover:bg-accent hover:text-primary lg:hidden"
               aria-label="Menu"
             >
               <Menu className="h-5 w-5" />

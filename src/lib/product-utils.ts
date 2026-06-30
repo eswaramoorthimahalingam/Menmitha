@@ -6,8 +6,12 @@ type LiveProduct = Product & {
 
 export function mergeInventoryProducts(inventory: LiveProduct[]): Product[] {
   const localById = new Map(CATALOG_PRODUCTS.map((product) => [product.id, product]));
+  const inventoryIds = new Set(inventory.map((product) => product.id));
+  const inactiveIds = new Set(
+    inventory.filter((product) => product.active === false).map((product) => product.id),
+  );
 
-  return inventory
+  const mergedInventory = inventory
     .filter((product) => product.active !== false)
     .map((product) => {
       const local = localById.get(product.id);
@@ -23,6 +27,12 @@ export function mergeInventoryProducts(inventory: LiveProduct[]): Product[] {
         trending: product.trending ?? local?.trending ?? false,
       };
     });
+
+  const localOnlyProducts = CATALOG_PRODUCTS.filter(
+    (product) => !inventoryIds.has(product.id) && !inactiveIds.has(product.id),
+  );
+
+  return [...mergedInventory, ...localOnlyProducts];
 }
 
 export function productGallery(product: Product) {

@@ -1,5 +1,12 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { type Dispatch, type FormEvent, type SetStateAction, useEffect, useState } from "react";
+import {
+  type CSSProperties,
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import {
   Leaf,
   Truck,
@@ -7,9 +14,10 @@ import {
   BadgePercent,
   RotateCcw,
   ShoppingBag,
-  Heart,
   Star,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   Plus,
   Minus,
   X,
@@ -18,8 +26,21 @@ import {
 import heroImg from "@/assets/hero-products.jpg";
 import oilImg from "@/assets/oil-pour.jpg";
 import masalaImg from "@/assets/masala-bowls.jpg";
+import kadalaiBanner from "@/assets/product-banners/kadalai.png";
+import kambuBanner from "@/assets/product-banners/kambu.png";
+import malliBanner from "@/assets/product-banners/malli.png";
+import manjalBanner from "@/assets/product-banners/manjal.png";
+import milagaiBanner from "@/assets/product-banners/milagai.png";
+import naattuSarkaraiBanner from "@/assets/product-banners/naattu-sarkarai.png";
+import ragiBanner from "@/assets/product-banners/ragi.png";
+import sambarBanner from "@/assets/product-banners/sambar.png";
+import shikakaiBanner from "@/assets/product-banners/shikakai.png";
+import siruthaniyaBanner from "@/assets/product-banners/siruthaniya.png";
+import wheatBanner from "@/assets/product-banners/wheat.png";
 import storyImg from "@/assets/story-craft.jpg";
 import { OrderConfirmationModal } from "@/components/order-confirmation-modal";
+import { ProductShowcaseCard } from "@/components/product-showcase-card";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteNavbar } from "@/components/site-navbar";
 import { CATALOG_PRODUCTS, PRODUCT_IMAGES, type Order, type Product } from "@/data/catalog";
 import { createOrder, fetchInventory, getApiBase } from "@/lib/admin-api";
@@ -49,6 +70,110 @@ const FEATURES = [
   { icon: ShieldCheck, title: "Certified Organic", sub: "100% guarantee" },
   { icon: BadgePercent, title: "Huge Savings", sub: "At lowest price" },
   { icon: RotateCcw, title: "Easy Returns", sub: "No questions asked" },
+];
+
+const HERO_PICKS = [
+  {
+    name: "Naatu Sarkarai",
+    sub: "Natural sweetener",
+    price: "₹65",
+    img: naattuSarkaraiBanner,
+    productId: "jaggery-powder-500g",
+  },
+  {
+    name: "Sambar Thool",
+    sub: "Home-made masala",
+    price: "₹40",
+    img: sambarBanner,
+    productId: "sambar-masala-200g",
+  },
+  {
+    name: "Manjal Thool",
+    sub: "Golden turmeric",
+    price: "₹25",
+    img: manjalBanner,
+    productId: "manjal-powder-200g",
+  },
+];
+
+const CATEGORY_BANNERS = [
+  {
+    title: "Naatu Sarkarai",
+    sub: "100% natural country sugar with rich traditional sweetness.",
+    img: naattuSarkaraiBanner,
+    accent: "oklch(0.42 0.1 45)",
+    productId: "jaggery-powder-500g",
+  },
+  {
+    title: "Kambu",
+    sub: "Pearl millet goodness for everyday fibre and nourishment.",
+    img: kambuBanner,
+    accent: "oklch(0.5 0.16 130)",
+    productId: "kambu-500g",
+  },
+  {
+    title: "Ragi Maavu",
+    sub: "Calcium-rich ragi flour prepared for wholesome family meals.",
+    img: ragiBanner,
+    accent: "oklch(0.48 0.02 250)",
+    productId: "ragi-flour-500g",
+  },
+  {
+    title: "Kadalai Maavu",
+    sub: "Protein-rich gram flour for snacks, batters and traditional recipes.",
+    img: kadalaiBanner,
+    accent: "oklch(0.62 0.13 70)",
+    productId: "kadalai-flour-500g",
+  },
+  {
+    title: "Kothumai Maavu",
+    sub: "Fine wheat flour made for soft chapatis and everyday cooking.",
+    img: wheatBanner,
+    accent: "oklch(0.48 0.08 55)",
+    productId: "wheat-flour-1kg",
+  },
+  {
+    title: "Siruthaniya Maavu",
+    sub: "A nourishing millet mix made with carefully selected grains.",
+    img: siruthaniyaBanner,
+    accent: "oklch(0.58 0.05 72)",
+    productId: "siruthaniya-health-mix-500g",
+  },
+  {
+    title: "Shikakai Thool",
+    sub: "Traditional herbal powder prepared without artificial additives.",
+    img: shikakaiBanner,
+    accent: "oklch(0.35 0.1 38)",
+    productId: "shikakai-powder-200g",
+  },
+  {
+    title: "Milagai Thool",
+    sub: "Bright red chilli powder with natural aroma and heat.",
+    img: milagaiBanner,
+    accent: "oklch(0.55 0.2 28)",
+    productId: "milagai-powder-200g",
+  },
+  {
+    title: "Sambar Thool",
+    sub: "Aromatic spice blend for soulful South Indian sambar.",
+    img: sambarBanner,
+    accent: "oklch(0.62 0.15 55)",
+    productId: "sambar-masala-200g",
+  },
+  {
+    title: "Malli Thool",
+    sub: "Coriander powder with warm fragrance and clean flavour.",
+    img: malliBanner,
+    accent: "oklch(0.62 0.1 82)",
+    productId: "malli-powder-200g",
+  },
+  {
+    title: "Manjal Thool",
+    sub: "Golden turmeric powder, naturally vibrant and earthy.",
+    img: manjalBanner,
+    accent: "oklch(0.74 0.16 85)",
+    productId: "manjal-powder-200g",
+  },
 ];
 
 function useReveal() {
@@ -132,6 +257,7 @@ function Home() {
         setCart={setCart}
         products={products}
       />
+      <SiteFooter />
     </div>
   );
 }
@@ -139,96 +265,64 @@ function Home() {
 /* ---------- Hero ---------- */
 function Hero() {
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden bg-gradient-hero text-primary-foreground"
-    >
+    <section id="home" className="commerce-hero">
       <div
-        className="absolute inset-0 opacity-40 mix-blend-soft-light"
+        className="commerce-hero-media"
         style={{
           backgroundImage: `url(${heroImg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.14_0.04_150)] via-[oklch(0.14_0.04_150)/0.6] to-transparent" />
+      <div className="commerce-hero-scrim" />
 
-      {/* floating leaves */}
-      <Leaf className="absolute top-20 right-10 h-24 w-24 text-leaf/30 float-slow" />
-      <Leaf className="absolute bottom-24 left-12 h-16 w-16 text-leaf/30 float-slower -rotate-45" />
-      <div className="absolute -right-32 -bottom-32 h-96 w-96 rounded-full bg-leaf/15 blur-3xl spin-slow" />
-
-      <div className="relative mx-auto max-w-[100rem] px-6 py-28 lg:py-40 grid lg:grid-cols-12 gap-10 items-center">
-        <div className="lg:col-span-7 space-y-7">
-          <div className="reveal inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/15 text-xs uppercase tracking-[0.2em]">
-            <Leaf className="h-3.5 w-3.5 text-leaf" /> Menmitha Food Products
+      <div className="commerce-hero-inner">
+        <div className="commerce-hero-copy">
+          <div className="commerce-hero-kicker reveal">
+            <Leaf className="h-3.5 w-3.5" /> Traditional South Indian pantry
           </div>
-          <h1 className="reveal font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.02] text-balance">
-            Made the <span className="italic text-gold">Traditional</span> Way.
-          </h1>
-          <p className="reveal max-w-xl text-lg text-primary-foreground/80 leading-relaxed">
-            Every ingredient is carefully selected and processed without chemicals or preservatives.
-            We preserve native food traditions while ensuring quality, hygiene and trust — from our
-            home to yours.
+          <h1 className="reveal">Pure staples for homes that still cook with care.</h1>
+          <p className="reveal">
+            Cold-pressed oils, home-made masalas, millet flours and natural sweeteners packed fresh
+            for everyday family kitchens.
           </p>
-          <div className="reveal flex flex-wrap items-center gap-4 pt-2">
-            <a
-              href="#shop"
-              className="btn-shine inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-gold text-primary font-semibold shadow-glow hover:scale-[1.02] transition-transform"
+          <div className="commerce-hero-actions reveal">
+            <Link
+              to="/product/$productId"
+              params={{ productId: "sambar-masala-200g" }}
+              className="commerce-hero-primary"
             >
-              Shop Now <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="#story"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/25 hover:bg-white/10 transition-colors text-sm"
-            >
-              Our Story
+              Buy best seller <ShoppingBag className="h-4 w-4" />
+            </Link>
+            <a href="#shop" className="commerce-hero-secondary">
+              Shop categories <ArrowRight className="h-4 w-4" />
             </a>
           </div>
-          <div className="reveal flex items-center gap-6 pt-4 text-sm text-primary-foreground/70">
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div
-                  key={i}
-                  className="h-9 w-9 rounded-full border-2 border-primary bg-gradient-to-br from-leaf to-gold"
-                />
+          <div className="commerce-hero-proof reveal">
+            <div className="flex items-center gap-1 text-gold">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="h-3.5 w-3.5 fill-current" />
               ))}
             </div>
-            <div>
-              <div className="flex items-center gap-1 text-gold">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                ))}
-              </div>
-              <p className="mt-1">Trusted by 5,000+ households across South India</p>
-            </div>
+            <span>Trusted by 5,000+ households</span>
+            <span>Free delivery above ₹999</span>
           </div>
         </div>
 
-        <div className="lg:col-span-5 relative">
-          <div className="reveal relative aspect-square max-w-md mx-auto">
-            <div className="absolute inset-0 rounded-full bg-gradient-gold blur-3xl opacity-30 spin-slow" />
-            <img
-              src={PRODUCT_IMAGES.jaggery}
-              alt="Jaggery powder"
-              className="relative z-10 w-full h-full object-contain drop-shadow-2xl float-slow"
-            />
-            <div className="absolute top-6 -left-6 z-20 bg-background text-foreground rounded-2xl p-4 shadow-elegant float-slower">
-              <div className="flex items-center gap-2">
-                <div className="h-10 w-10 rounded-full bg-leaf/15 flex items-center justify-center">
-                  <Leaf className="h-5 w-5 text-leaf" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">100%</p>
-                  <p className="text-sm font-semibold">Chemical-free</p>
-                </div>
-              </div>
-            </div>
-            <div className="absolute bottom-4 -right-4 z-20 bg-background text-foreground rounded-2xl p-4 shadow-elegant float-slow">
-              <p className="text-xs text-muted-foreground">Cold pressed</p>
-              <p className="text-sm font-semibold">Wooden chekku</p>
-            </div>
-          </div>
+        <div className="commerce-hero-picks reveal" aria-label="Featured products">
+          {HERO_PICKS.map((item) => (
+            <Link
+              key={item.productId}
+              to="/product/$productId"
+              params={{ productId: item.productId }}
+              className="commerce-hero-pick"
+            >
+              <img src={item.img} alt={item.name} />
+              <span>
+                <strong>{item.name}</strong>
+                <small>{item.sub}</small>
+              </span>
+              <em>{item.price}</em>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
@@ -238,20 +332,18 @@ function Hero() {
 /* ---------- Feature strip ---------- */
 function FeatureStrip() {
   return (
-    <section className="border-y border-border bg-card">
-      <div className="mx-auto max-w-[100rem] px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
+    <section className="commerce-benefits">
+      <div className="mx-auto grid max-w-[100rem] grid-cols-2 gap-px px-6 md:grid-cols-4">
         {FEATURES.map(({ icon: Icon, title, sub }, i) => (
           <div
             key={title}
-            className="reveal flex items-center gap-4 px-6 py-7"
+            className="commerce-benefit reveal"
             style={{ transitionDelay: `${i * 80}ms` }}
           >
-            <div className="h-12 w-12 rounded-full bg-accent flex items-center justify-center text-primary">
-              <Icon className="h-5 w-5" />
-            </div>
+            <Icon className="h-5 w-5" />
             <div>
-              <p className="font-semibold text-sm">{title}</p>
-              <p className="text-xs text-muted-foreground">{sub}</p>
+              <p>{title}</p>
+              <span>{sub}</span>
             </div>
           </div>
         ))}
@@ -314,32 +406,63 @@ function Story() {
 
 /* ---------- Category band ---------- */
 function CategoryBand({ products }: { products: Product[] }) {
+  const [activeBannerIndex, setActiveBannerIndex] = useState(0);
+  const activeBanner = CATEGORY_BANNERS[activeBannerIndex];
   const cats = [
     {
       name: "Cold-Pressed Oils",
       category: "Cold-Pressed Oils",
       img: PRODUCT_IMAGES.oil,
+      productId: "groundnut-oil-1l",
+      tone: "oklch(0.76 0.17 75)",
+      soft: "oklch(0.92 0.08 68)",
       count: products.filter((p) => p.category === "Cold-Pressed Oils").length,
     },
     {
       name: "Home-Made Masalas",
       category: "Home-Made Masalas",
       img: PRODUCT_IMAGES.masala,
+      productId: "sambar-masala-200g",
+      tone: "oklch(0.69 0.17 18)",
+      soft: "oklch(0.91 0.07 22)",
       count: products.filter((p) => p.category === "Home-Made Masalas").length,
     },
     {
       name: "Jaggery & Sweeteners",
       category: "Jaggery & Sweeteners",
       img: PRODUCT_IMAGES.jaggery,
+      productId: "jaggery-powder-500g",
+      tone: "oklch(0.66 0.14 190)",
+      soft: "oklch(0.91 0.05 190)",
       count: products.filter((p) => p.category === "Jaggery & Sweeteners").length,
     },
     {
       name: "Flours & Staples",
       category: "Flours & Staples",
       img: PRODUCT_IMAGES.wheat,
+      productId: "wheat-flour-1kg",
+      tone: "oklch(0.62 0.16 142)",
+      soft: "oklch(0.91 0.06 142)",
       count: products.filter((p) => p.category === "Flours & Staples").length,
     },
   ];
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveBannerIndex((current) => (current + 1) % CATEGORY_BANNERS.length);
+    }, 4500);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const showPreviousBanner = () => {
+    setActiveBannerIndex(
+      (current) => (current - 1 + CATEGORY_BANNERS.length) % CATEGORY_BANNERS.length,
+    );
+  };
+  const showNextBanner = () => {
+    setActiveBannerIndex((current) => (current + 1) % CATEGORY_BANNERS.length);
+  };
+
   return (
     <section id="shop" className="py-20">
       <div className="mx-auto max-w-[100rem] px-6">
@@ -359,29 +482,89 @@ function CategoryBand({ products }: { products: Product[] }) {
             View all categories <ArrowRight className="h-4 w-4" />
           </a>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {cats.map((c, i) => {
-            const targetProduct = products.find((product) => product.category === c.category);
 
+        <div
+          className="category-banner-slider reveal"
+          style={{ "--banner-accent": activeBanner.accent } as CSSProperties}
+        >
+          <div className="category-banner-copy">
+            <p>Featured product</p>
+            <h3>{activeBanner.title}</h3>
+            <span>{activeBanner.sub}</span>
+            <Link
+              to="/product/$productId"
+              params={{ productId: activeBanner.productId }}
+              className="category-banner-cta"
+            >
+              Shop now <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <Link
+            to="/product/$productId"
+            params={{ productId: activeBanner.productId }}
+            className="category-banner-frame"
+            aria-label={`View ${activeBanner.title}`}
+          >
+            <img src={activeBanner.img} alt={activeBanner.title} />
+          </Link>
+
+          <button
+            onClick={showPreviousBanner}
+            className="category-banner-arrow left-4"
+            aria-label="Previous product banner"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <button
+            onClick={showNextBanner}
+            className="category-banner-arrow right-4"
+            aria-label="Next product banner"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+
+          <div className="category-banner-thumbs" aria-label="Product banner slides">
+            {CATEGORY_BANNERS.map((banner, index) => (
+              <button
+                key={banner.title}
+                onClick={() => setActiveBannerIndex(index)}
+                className={index === activeBannerIndex ? "is-active" : ""}
+                aria-label={`Show ${banner.title}`}
+              >
+                <img src={banner.img} alt="" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid gap-x-6 gap-y-16 pt-12 sm:grid-cols-2 lg:grid-cols-4">
+          {cats.map((c, i) => {
             return (
               <Link
                 key={c.name}
                 to="/product/$productId"
-                params={{ productId: targetProduct?.id ?? CATALOG_PRODUCTS[0].id }}
-                className="reveal group relative rounded-3xl overflow-hidden bg-card border border-border product-card"
-                style={{ transitionDelay: `${i * 80}ms` }}
+                params={{ productId: c.productId }}
+                className="category-showcase-card reveal"
+                style={
+                  {
+                    "--card-accent": c.tone,
+                    "--card-soft": c.soft,
+                    transitionDelay: `${i * 80}ms`,
+                  } as CSSProperties
+                }
               >
-                <div className="aspect-[4/5] bg-gradient-cream flex items-center justify-center">
-                  <img src={c.img} alt={c.name} className="h-56 w-56 object-contain" />
+                <div className="category-showcase-image">
+                  <img src={c.img} alt={c.name} loading="lazy" />
                 </div>
-                <div className="p-5 flex items-center justify-between">
-                  <div>
-                    <h3 className="font-display text-xl">{c.name}</h3>
-                    <p className="text-xs text-muted-foreground mt-0.5">{c.count} products</p>
-                  </div>
-                  <span className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center group-hover:rotate-45 transition-transform">
+                <div className="category-showcase-content">
+                  <span>Shop category</span>
+                  <h3>{c.name}</h3>
+                  <p>{c.count} products</p>
+                  <div className="category-showcase-button">
+                    Explore
                     <ArrowRight className="h-4 w-4" />
-                  </span>
+                  </div>
                 </div>
               </Link>
             );
@@ -414,71 +597,9 @@ function ProductGrid({
           <h2 className="reveal font-display text-4xl lg:text-5xl mt-2">{title}</h2>
           <div className="reveal mx-auto mt-5 h-2 w-24 leaf-divider" />
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid gap-x-6 gap-y-16 pt-12 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((p, i) => (
-            <article
-              key={p.id}
-              className="product-card group relative rounded-3xl overflow-hidden bg-card border border-border"
-              style={{ transitionDelay: `${i * 70}ms` }}
-            >
-              <div className="relative aspect-square bg-gradient-cream overflow-hidden">
-                <Link
-                  to="/product/$productId"
-                  params={{ productId: p.id }}
-                  className="block h-full"
-                >
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-contain p-8"
-                  />
-                  {p.tag && (
-                    <span className="absolute top-4 left-4 text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-primary text-primary-foreground">
-                      {p.tag}
-                    </span>
-                  )}
-                </Link>
-                <button
-                  className="absolute top-4 right-4 h-9 w-9 rounded-full bg-card/90 backdrop-blur flex items-center justify-center hover:bg-card transition-colors"
-                  aria-label="Add to wishlist"
-                >
-                  <Heart className="h-4 w-4" />
-                </button>
-              </div>
-              <div className="p-5 space-y-3">
-                <div>
-                  <Link to="/product/$productId" params={{ productId: p.id }}>
-                    <h3 className="font-display text-lg leading-tight hover:text-primary">
-                      {p.name}
-                    </h3>
-                  </Link>
-                  <p className="text-xs text-muted-foreground mt-1">{p.tagline}</p>
-                </div>
-                <div className="flex items-center gap-1 text-gold">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-current" />
-                  ))}
-                  <span className="ml-1 text-xs text-muted-foreground">(128)</span>
-                </div>
-                <div className="flex items-end justify-between pt-1">
-                  <div>
-                    <span className="text-lg font-semibold text-primary">₹{p.price}</span>
-                    {p.mrp && (
-                      <span className="ml-2 text-xs text-muted-foreground line-through">
-                        ₹{p.mrp}
-                      </span>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => onAdd(p.id)}
-                    className="btn-shine inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-primary-foreground text-xs font-semibold hover:scale-[1.03] transition-transform"
-                  >
-                    <Plus className="h-3.5 w-3.5" /> Add
-                  </button>
-                </div>
-              </div>
-            </article>
+            <ProductShowcaseCard key={p.id} product={p} index={i} onAdd={onAdd} />
           ))}
         </div>
       </div>

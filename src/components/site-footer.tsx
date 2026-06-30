@@ -4,7 +4,7 @@ import { BrandLogo } from "@/components/brand-logo";
 
 export function SiteFooter() {
   return (
-    <footer id="contact" className="bg-primary pb-10 pt-20 text-primary-foreground scroll-mt-24">
+    <footer className="bg-primary pb-10 pt-20 text-primary-foreground">
       <div className="mx-auto grid max-w-[100rem] gap-10 px-6 lg:grid-cols-12">
         <div className="space-y-5 lg:col-span-4">
           <BrandLogo light />

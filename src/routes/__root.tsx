@@ -4,12 +4,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 
-import { SiteFooter } from "@/components/site-footer";
+import faviconUrl from "@/assets/menmitha-logo-cropped.png";
+
 import appCss from "../styles.css?url";
 
 const SITE_URL = "https://menmithafoodproducts.com";
@@ -94,6 +96,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: faviconUrl },
+      { rel: "apple-touch-icon", href: faviconUrl },
       { rel: "canonical", href: SITE_URL },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -129,10 +133,21 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="min-h-screen bg-background text-foreground">
+        <ScrollToTop />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
-        <SiteFooter />
       </div>
     </QueryClientProvider>
   );
+}
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.hash]);
+
+  return null;
 }
