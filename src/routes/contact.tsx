@@ -16,6 +16,7 @@ export const Route = createFileRoute("/contact")({
           "Contact Menmitha Food Products for orders, delivery support and wholesale enquiries.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://menmithafoodproducts.com/contact" }],
   }),
   component: ContactPage,
 });

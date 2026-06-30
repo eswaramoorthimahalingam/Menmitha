@@ -20,6 +20,7 @@ export const Route = createFileRoute("/shop")({
           "Shop cold-pressed oils, home-made masalas, jaggery, flours and traditional staples from Menmitha.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://menmithafoodproducts.com/shop" }],
   }),
   component: ShopPage,
 });

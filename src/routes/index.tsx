@@ -61,6 +61,7 @@ export const Route = createFileRoute("/")({
         content: "From our home to your home — honest food made with care.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://menmithafoodproducts.com/" }],
   }),
   component: Home,
 });

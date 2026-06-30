@@ -19,6 +19,7 @@ export const Route = createFileRoute("/about")({
           "Learn about Menmitha's traditional food-making methods, ingredient sourcing and small-batch process.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://menmithafoodproducts.com/about" }],
   }),
   component: AboutPage,
 });

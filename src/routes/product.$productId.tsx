@@ -20,15 +20,31 @@ import { createOrder, fetchInventory } from "@/lib/admin-api";
 import { mergeInventoryProducts, productDiscount, productGallery } from "@/lib/product-utils";
 
 export const Route = createFileRoute("/product/$productId")({
-  head: () => ({
-    meta: [
-      { title: "Product — Menmitha Food Products" },
-      {
-        name: "description",
-        content: "View product details, pricing, stock and place a live Menmitha order.",
-      },
-    ],
-  }),
+  head: ({ params }) => {
+    const product = CATALOG_PRODUCTS.find((item) => item.id === params.productId);
+    const title = product
+      ? `${product.name} — Menmitha Food Products`
+      : "Product — Menmitha Food Products";
+    const description =
+      product?.description ??
+      "View product details, pricing, stock and place a live Menmitha order.";
+
+    return {
+      meta: [
+        { title },
+        {
+          name: "description",
+          content: description,
+        },
+      ],
+      links: [
+        {
+          rel: "canonical",
+          href: `https://menmithafoodproducts.com/product/${params.productId}`,
+        },
+      ],
+    };
+  },
   component: ProductPage,
 });
 

@@ -15,6 +15,26 @@ import faviconUrl from "@/assets/menmitha-logo-cropped.png";
 import appCss from "../styles.css?url";
 
 const SITE_URL = "https://menmithafoodproducts.com";
+const SITE_NAME = "Menmitha Food Products";
+const SITE_DESCRIPTION =
+  "Cold-pressed chekku oils, home-made masalas and traditional South Indian staples. Made the traditional way - no chemicals, no preservatives.";
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "Store",
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  areaServed: "India",
+  image: `${SITE_URL}/assets/menmitha-logo-cropped-CszoQ4Bx.png`,
+  knowsAbout: [
+    "Cold-pressed oils",
+    "Home-made masalas",
+    "Millet flours",
+    "Natural jaggery",
+    "South Indian pantry staples",
+  ],
+};
 
 function NotFoundComponent() {
   return (
@@ -81,10 +101,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Menmitha Food Products — Traditional, Pure, Crafted with Care" },
       {
         name: "description",
-        content:
-          "Cold-pressed chekku oils, home-made masalas and traditional South Indian staples. Made the traditional way — no chemicals, no preservatives.",
+        content: SITE_DESCRIPTION,
       },
-      { property: "og:title", content: "Menmitha Food Products" },
+      { property: "og:title", content: SITE_NAME },
       {
         property: "og:description",
         content:
@@ -98,7 +117,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: faviconUrl },
       { rel: "apple-touch-icon", href: faviconUrl },
-      { rel: "canonical", href: SITE_URL },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -118,6 +136,10 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
+        />
       </head>
       <body>
         {children}
