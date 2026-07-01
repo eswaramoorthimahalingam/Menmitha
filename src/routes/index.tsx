@@ -558,7 +558,7 @@ function CategoryBand({ products }: { products: Product[] }) {
                 <div className="category-showcase-image">
                   <img src={c.img} alt={c.name} loading="lazy" />
                 </div>
-                <div className="category-showcase-content">
+                <div className="category-showcase-content mt-7">
                   <span>Shop category</span>
                   <h3>{c.name}</h3>
                   <p>{c.count} products</p>

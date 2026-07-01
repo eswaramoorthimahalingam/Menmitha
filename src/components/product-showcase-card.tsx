@@ -39,7 +39,7 @@ export function ProductShowcaseCard({ product, index = 0, onAdd }: ProductShowca
         <img src={product.img} alt={product.name} loading="lazy" />
       </Link>
 
-      <div className="product-showcase-content">
+      <div className="product-showcase-content mt-7">
         {product.tag && <span className="product-showcase-tag">{product.tag}</span>}
         <Link to="/product/$productId" params={{ productId: product.id }}>
           <h3>{product.name}</h3>
