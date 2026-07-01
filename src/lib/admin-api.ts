@@ -48,6 +48,16 @@ const DEFAULT_API_BASE = defaultApiBase();
 const API_BASE = (import.meta.env.VITE_ADMIN_API_BASE as string | undefined) ?? DEFAULT_API_BASE;
 const ADMIN_PASSWORD_STORAGE_KEY = "menmitha_admin_password";
 
+function formatApiBase() {
+  return API_BASE || "this site";
+}
+
+function isNetworkFailure(error: unknown) {
+  if (!(error instanceof TypeError)) return false;
+  const message = error.message.toLowerCase();
+  return message.includes("failed to fetch") || message.includes("networkerror");
+}
+
 export function getStoredAdminPassword() {
   if (typeof window === "undefined") return "";
   return window.localStorage.getItem(ADMIN_PASSWORD_STORAGE_KEY) ?? "";
@@ -80,10 +90,20 @@ async function apiFetch<T>(
   init?: RequestInit,
   options: { admin?: boolean } = {},
 ): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    ...init,
-    headers: toHeaders(init?.headers, options),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      ...init,
+      headers: toHeaders(init?.headers, options),
+    });
+  } catch (error) {
+    if (isNetworkFailure(error)) {
+      throw new Error(
+        `Admin API is unreachable at ${formatApiBase()}. Check that the API app is deployed and the domain DNS is active.`,
+      );
+    }
+    throw error;
+  }
 
   if (!response.ok) {
     let message = `Request failed with ${response.status}`;

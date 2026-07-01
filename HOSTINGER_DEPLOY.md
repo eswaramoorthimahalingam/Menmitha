@@ -46,3 +46,14 @@ ADMIN_PASSWORD=replace-with-a-strong-password
 ```
 
 The API stores orders and inventory in `.data/admin-store.json` on the server. Keep that folder backed up before redeploying or resetting the hosting app.
+
+Before testing the admin login, confirm the API host is reachable:
+
+```sh
+curl https://api.menmithafoodproducts.com/api/health
+```
+
+It should return `{"ok":true}`. If the browser shows `ERR_NAME_NOT_RESOLVED`, the API
+subdomain is not connected in DNS or the Admin API app has not been assigned to that
+domain yet. The website can load without it, but admin login, live orders, and inventory
+sync require this API app.
