@@ -33,9 +33,18 @@ type ApiEvent = {
   product?: InventoryProduct;
 };
 
-const DEFAULT_API_BASE = import.meta.env.DEV
-  ? "http://localhost:8787"
-  : "https://api.menmithafoodproducts.com";
+function defaultApiBase() {
+  if (typeof window !== "undefined") {
+    const localHosts = new Set(["localhost", "127.0.0.1", "::1"]);
+    if (localHosts.has(window.location.hostname)) return "http://localhost:8787";
+  }
+
+  return import.meta.env.MODE === "development"
+    ? "http://localhost:8787"
+    : "https://api.menmithafoodproducts.com";
+}
+
+const DEFAULT_API_BASE = defaultApiBase();
 const API_BASE = (import.meta.env.VITE_ADMIN_API_BASE as string | undefined) ?? DEFAULT_API_BASE;
 const ADMIN_PASSWORD_STORAGE_KEY = "menmitha_admin_password";
 
