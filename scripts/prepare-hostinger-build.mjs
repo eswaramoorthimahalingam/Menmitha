@@ -24,6 +24,8 @@ rmSync(buildDir, { recursive: true, force: true });
 mkdirSync(buildDir, { recursive: true });
 cpSync(sourceDir, buildDir, { recursive: true });
 
+const builtAt = new Date().toISOString();
+
 const sitemapPaths = [
   "/",
   "/about",
@@ -60,6 +62,19 @@ writeFileSync(
 );
 
 writeFileSync(
+  path.join(buildDir, "build-info.json"),
+  JSON.stringify(
+    {
+      siteUrl,
+      builtAt,
+      cachePolicy: "html-no-store-assets-immutable",
+    },
+    null,
+    2,
+  ) + "\n",
+);
+
+writeFileSync(
   path.join(buildDir, ".htaccess"),
   [
     "Options -Indexes",
@@ -69,6 +84,16 @@ writeFileSync(
     '  Header always set X-Frame-Options "SAMEORIGIN"',
     '  Header always set Referrer-Policy "strict-origin-when-cross-origin"',
     '  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"',
+    "",
+    '  <FilesMatch "\\.(html)$">',
+    '    Header set Cache-Control "no-cache, no-store, must-revalidate"',
+    '    Header set Pragma "no-cache"',
+    '    Header set Expires "0"',
+    "  </FilesMatch>",
+    "",
+    '  <FilesMatch "\\.(js|css|png|jpg|jpeg|webp|avif|svg|ico|woff2?)$">',
+    '    Header set Cache-Control "public, max-age=31536000, immutable"',
+    "  </FilesMatch>",
     "</IfModule>",
     "",
     "<IfModule mod_rewrite.c>",
