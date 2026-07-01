@@ -2,6 +2,7 @@ import { ChevronDown, Heart, Menu, Search, ShoppingBag, UserRound } from "lucide
 import { useEffect, useState } from "react";
 
 import { BrandLogo } from "@/components/brand-logo";
+import { BUSINESS_INFO, BUSINESS_LINKS } from "@/lib/business-info";
 
 type SiteNavbarProps = {
   cartCount?: number;
@@ -86,14 +87,19 @@ export function SiteNavbar({ cartCount = 0, onCart }: SiteNavbarProps) {
     <>
       <div className="border-b border-gold/50 bg-primary text-xs text-primary-foreground">
         <div className="mx-auto flex max-w-[100rem] items-center justify-between px-6 py-2.5">
-          <span className="font-semibold">Call us: +91 98765 43210</span>
+          <a
+            href={BUSINESS_LINKS.primaryPhone}
+            className="font-semibold transition-colors hover:text-gold"
+          >
+            Call us: {BUSINESS_INFO.primaryPhone}
+          </a>
           <span className="hidden font-semibold md:inline">
             Free shipping across India on orders above ₹999{" "}
             <a href="/shop" className="text-gold underline decoration-gold/70 underline-offset-2">
               Shop now
             </a>
           </span>
-          <span className="hidden sm:inline">English · ₹ INR</span>
+          <span className="hidden sm:inline">GSTIN: {BUSINESS_INFO.gstin}</span>
         </div>
       </div>
       <header

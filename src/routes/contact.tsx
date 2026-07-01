@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Clock3, Mail, MapPin, Phone, Send, Truck } from "lucide-react";
+import { Clock3, FileText, Mail, MapPin, MessageCircle, Phone, Send, Truck } from "lucide-react";
 import { type FormEvent, useState } from "react";
 
 import heroProductsImg from "@/assets/hero-products.jpg";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNavbar } from "@/components/site-navbar";
+import { BUSINESS_INFO, BUSINESS_LINKS } from "@/lib/business-info";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -26,6 +27,19 @@ function ContactPage() {
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const subject = String(formData.get("subject") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+    const whatsappMessage = [
+      "New enquiry from Menmitha website",
+      `Subject: ${subject}`,
+      `Email: ${email}`,
+      `Message: ${message}`,
+    ].join("\n");
+    const whatsappUrl = `${BUSINESS_LINKS.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
+
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
     setSent(true);
   };
 
@@ -36,16 +50,22 @@ function ContactPage() {
 
       <main className="retail-shell py-10">
         <section className="grid gap-8 lg:grid-cols-[1fr_0.95fr]">
-          <div className="map-grid relative min-h-[430px] overflow-hidden">
+          <div className="relative min-h-[430px] overflow-hidden bg-muted/45">
+            <iframe
+              src={BUSINESS_LINKS.googleMapEmbed}
+              title="Menmitha Food Products Google Map"
+              className="absolute inset-0 h-full w-full border-0"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
             <div className="absolute left-6 top-6 max-w-xs bg-white p-5 shadow-card">
               <p className="font-extrabold">Menmitha Food Products</p>
               <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                Traditional pantry staples prepared and packed in Tamil Nadu, India.
+                {BUSINESS_INFO.address}
               </p>
+              <p className="mt-2 text-xs font-bold text-primary">GSTIN: {BUSINESS_INFO.gstin}</p>
               <p className="mt-3 text-xs font-bold text-ruby">4.9 ★ Customer support</p>
-            </div>
-            <div className="absolute left-[53%] top-[47%] h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ruby/20 p-2">
-              <div className="h-full w-full rounded-full bg-ruby" />
             </div>
           </div>
 
@@ -58,7 +78,10 @@ function ContactPage() {
             <div className="mt-6 space-y-4">
               <label className="grid gap-2 text-sm font-semibold md:grid-cols-[120px_1fr] md:items-center">
                 <span>Subject</span>
-                <select className="h-11 border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-ruby/40">
+                <select
+                  name="subject"
+                  className="h-11 border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-ruby/40"
+                >
                   <option>Customer service</option>
                   <option>Bulk order</option>
                   <option>Delivery support</option>
@@ -68,6 +91,7 @@ function ContactPage() {
                 <span>Email address</span>
                 <input
                   required
+                  name="email"
                   type="email"
                   placeholder="your@email.com"
                   className="h-11 border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-ruby/40"
@@ -77,6 +101,7 @@ function ContactPage() {
                 <span className="md:pt-3">Message</span>
                 <textarea
                   required
+                  name="message"
                   rows={7}
                   placeholder="How can we help?"
                   className="resize-none border border-border bg-white px-3 py-3 text-sm outline-none focus:ring-2 focus:ring-ruby/40"
@@ -97,29 +122,42 @@ function ContactPage() {
               </div>
               {sent && (
                 <p className="rounded-md bg-white px-4 py-3 text-sm font-semibold text-primary">
-                  Thanks. Your message is ready for follow-up.
+                  Thanks. Your message is opening in WhatsApp.
                 </p>
               )}
             </div>
           </form>
         </section>
 
-        <section className="mt-12 grid bg-muted/45 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="mt-12 grid bg-muted/45 sm:grid-cols-2 lg:grid-cols-3">
           {(
             [
-              [MapPin, "Tamil Nadu, India", "Traditional food products"],
-              [Phone, "Call us", "+91 98765 43210"],
-              [Mail, "Mail us", "hello@menmitha.com"],
+              [MapPin, "Visit us", BUSINESS_INFO.address, undefined],
+              [Phone, "Call us", BUSINESS_INFO.primaryPhone, BUSINESS_LINKS.primaryPhone],
+              [MessageCircle, "WhatsApp", BUSINESS_INFO.whatsapp, BUSINESS_LINKS.whatsapp],
+              [Mail, "e-mail", BUSINESS_INFO.email, BUSINESS_LINKS.email],
+              [FileText, "GSTIN", BUSINESS_INFO.gstin, undefined],
               [Clock3, "Open time", "10:00AM - 6:00PM"],
             ] as const
-          ).map(([Icon, title, text]) => (
-            <div key={title} className="flex items-center gap-4 border-border p-6 lg:border-r">
+          ).map(([Icon, title, text, href]) => (
+            <div key={title} className="flex items-start gap-4 border-border p-6 lg:border-r">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-ruby text-ruby">
                 <Icon className="h-5 w-5" />
               </span>
               <div>
                 <p className="text-sm font-extrabold">{title}</p>
-                <p className="text-sm text-muted-foreground">{text}</p>
+                {href ? (
+                  <a
+                    href={href}
+                    className="break-words text-sm text-muted-foreground transition-colors hover:text-ruby"
+                    target={href.startsWith("http") ? "_blank" : undefined}
+                    rel={href.startsWith("http") ? "noreferrer" : undefined}
+                  >
+                    {text}
+                  </a>
+                ) : (
+                  <p className="text-sm leading-6 text-muted-foreground">{text}</p>
+                )}
               </div>
             </div>
           ))}

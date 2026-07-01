@@ -11,6 +11,8 @@ import {
 import { type ReactNode, useEffect } from "react";
 
 import faviconUrl from "@/assets/menmitha-logo-cropped.png";
+import { WhatsAppPopup } from "@/components/whatsapp-popup";
+import { BUSINESS_INFO } from "@/lib/business-info";
 
 import appCss from "../styles.css?url";
 
@@ -25,7 +27,18 @@ const businessSchema = {
   name: SITE_NAME,
   url: SITE_URL,
   description: SITE_DESCRIPTION,
+  email: BUSINESS_INFO.email,
+  telephone: BUSINESS_INFO.primaryPhone,
+  taxID: BUSINESS_INFO.gstin,
   areaServed: "India",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "54, Kulathukattu Thottam, Merku Pudhur",
+    addressLocality: "Nasiyanur",
+    addressRegion: "Tamil Nadu",
+    postalCode: "638107",
+    addressCountry: "IN",
+  },
   image: `${SITE_URL}/assets/menmitha-logo-cropped-CszoQ4Bx.png`,
   knowsAbout: [
     "Cold-pressed oils",
@@ -158,6 +171,7 @@ function RootComponent() {
         <ScrollToTop />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <WhatsAppPopup />
       </div>
     </QueryClientProvider>
   );
