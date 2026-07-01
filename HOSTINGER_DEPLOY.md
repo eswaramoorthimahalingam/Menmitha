@@ -47,6 +47,13 @@ ADMIN_PASSWORD=replace-with-a-strong-password
 
 The API stores orders and inventory in `.data/admin-store.json` on the server. Keep that folder backed up before redeploying or resetting the hosting app.
 
+If admin login shows `Admin API is unreachable at https://api.menmithafoodproducts.com`,
+the website is deployed but the Admin API is not reachable. Fix it in Hostinger by
+creating or assigning the `api.menmithafoodproducts.com` subdomain to the Node.js
+Admin API app, then add the required DNS record for that subdomain. Do not point
+`VITE_ADMIN_API_BASE` at the main website unless the API routes are actually served
+there.
+
 Before testing the admin login, confirm the API host is reachable:
 
 ```sh
